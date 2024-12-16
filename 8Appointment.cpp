@@ -23,79 +23,200 @@ OUTPUT:
 	e) Sort list based on time using pointer manipulation
 	
 */
-	
 #include <iostream>
+#include <string>
 using namespace std;
 
+// Node structure for linked list
+struct Node {
+    string visitorName;
+    int hourOfDay;
+    int startTime;
+    int endTime;
+    Node* next;
+
+    Node(string name, int hour, int start, int end) : visitorName(name), hourOfDay(hour), startTime(start), endTime(end), next(nullptr) {}
+};
+
 class AppointmentScheduler {
+private:
+    Node* head;
+
 public:
-    void initialize() {
-        // Initialize any necessary data structures or variables
+    AppointmentScheduler() : head(nullptr) {}
+
+    // Add free slot
+    void addFreeSlot(int hourOfDay, int startTime, int endTime) {
+        Node* newNode = new Node("Free Slot", hourOfDay, startTime, endTime);
+        if (!head) {
+            head = newNode;
+        } else {
+            Node* temp = head;
+            while (temp->next) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
     }
 
-    void addFreeSlot(int hourOfDay, int startTime, int endTime, int minAvailability, int maxAvailability) {
-        // Implement logic to add free slots
-        // You'll need to define this method based on your requirements
+    // Display free slots
+    void displayFreeSlots() {
+        if (!head) {
+            cout << "No free slots available.\n";
+            return;
+        }
+
+        Node* temp = head;
+        cout << "Free Slots:\n";
+        while (temp) {
+            if (temp->visitorName == "Free Slot") {
+                cout << "Hour: " << temp->hourOfDay << " | Start: " << temp->startTime << " | End: " << temp->endTime << "\n";
+            }
+            temp = temp->next;
+        }
     }
 
-    void displayList() {
-        // Implement logic to display free slots
-        // You'll need to define this method as well
+    // Book an appointment
+    void bookAppointment(string name, int hourOfDay, int startTime, int duration) {
+        Node* temp = head;
+        while (temp) {
+            if (temp->visitorName == "Free Slot" && temp->hourOfDay == hourOfDay && temp->startTime <= startTime && temp->endTime >= startTime + duration) {
+                temp->visitorName = name;
+                temp->endTime = startTime + duration;
+                cout << "Appointment booked for " << name << ".\n";
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "No suitable slot found for booking.\n";
+    }
+
+    // Cancel an appointment
+    void cancelAppointment(string name) {
+        Node* temp = head;
+        while (temp) {
+            if (temp->visitorName == name) {
+                temp->visitorName = "Free Slot";
+                cout << "Appointment for " << name << " has been cancelled.\n";
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "No appointment found for " << name << ".\n";
+    }
+
+    // Sort list based on time
+    void sortByTime() {
+        if (!head || !head->next) return;
+
+        for (Node* i = head; i->next; i = i->next) {
+            for (Node* j = head; j->next; j = j->next) {
+                if (j->hourOfDay > j->next->hourOfDay || (j->hourOfDay == j->next->hourOfDay && j->startTime > j->next->startTime)) {
+                    swap(j->hourOfDay, j->next->hourOfDay);
+                    swap(j->startTime, j->next->startTime);
+                    swap(j->endTime, j->next->endTime);
+                    swap(j->visitorName, j->next->visitorName);
+                }
+            }
+        }
+        cout << "Slots sorted by time.\n";
+    }
+
+    // Sort by pointer manipulation (Bubble Sort)
+    void sortByPointer() {
+        if (!head || !head->next) return;
+
+        bool swapped;
+        do {
+            swapped = false;
+            Node** current = &head;
+
+            while ((*current)->next) {
+                Node* a = *current;
+                Node* b = a->next;
+
+                if (a->hourOfDay > b->hourOfDay || (a->hourOfDay == b->hourOfDay && a->startTime > b->startTime)) {
+                    a->next = b->next;
+                    b->next = a;
+                    *current = b;
+                    swapped = true;
+                }
+                current = &(*current)->next;
+            }
+        } while (swapped);
+
+        cout << "Slots sorted by time using pointer manipulation.\n";
     }
 };
 
 int main() {
-    int choice = 0;
-    int hod, stime, min, max;
+    AppointmentScheduler scheduler;
+    int choice, hourOfDay, startTime, endTime, duration;
+    string visitorName;
 
-    AppointmentScheduler sch;
-    sch.initialize();
-
-    while (choice != 6) {
-        cout << "\n*************** APPOINTMENT SCHEDULER *****************";
-        cout << "\n1. Add free slots";
-        cout << "\n2. Display free slots";
-        cout << "\n3. Book appointment";
-        cout << "\n4. Sort list based on time";
-        cout << "\n5. Sort list based on time using pointer manipulation";
-        cout << "\n6. Exit Application";
-        cout << "\nWhat is your choice: ";
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Add Free Slot\n";
+        cout << "2. Display Free Slots\n";
+        cout << "3. Book Appointment\n";
+        cout << "4. Cancel Appointment\n";
+        cout << "5. Sort Slots by Time\n";
+        cout << "6. Sort Slots by Pointer Manipulation\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
             case 1:
-                cout << "\nEnter hour of a day (24-hour format, 0 to 23): ";
-                cin >> hod;
-                cout << "\nEnter start time of an hour: ";
-                cin >> stime;
-                cout << "\nEnter minimum availability as minutes: ";
-                cin >> min;
-                cout << "\nEnter maximum availability as minutes: ";
-                cin >> max;
-                sch.addFreeSlot(hod, stime, stime + 1, min, max); // Example: Assuming each slot is 1 hour
+                cout << "Enter hour of the day (0-23): ";
+                cin >> hourOfDay;
+                cout << "Enter start time: ";
+                cin >> startTime;
+                cout << "Enter end time: ";
+                cin >> endTime;
+                scheduler.addFreeSlot(hourOfDay, startTime, endTime);
                 break;
+
             case 2:
-                sch.displayList();
+                scheduler.displayFreeSlots();
                 break;
+
             case 3:
-                // Implement booking logic
+                cout << "Enter visitor name: ";
+                cin.ignore();
+                getline(cin, visitorName);
+                cout << "Enter hour of the day (0-23): ";
+                cin >> hourOfDay;
+                cout << "Enter start time: ";
+                cin >> startTime;
+                cout << "Enter duration: ";
+                cin >> duration;
+                scheduler.bookAppointment(visitorName, hourOfDay, startTime, duration);
                 break;
+
             case 4:
-                // Implement sorting by time
+                cout << "Enter visitor name to cancel: ";
+                cin.ignore();
+                getline(cin, visitorName);
+                scheduler.cancelAppointment(visitorName);
                 break;
+
             case 5:
-                // Implement sorting using pointers
+                scheduler.sortByTime();
                 break;
+
             case 6:
-                cout << "\nGoodbye!";
+                scheduler.sortByPointer();
                 break;
+
+            case 7:
+                cout << "Exiting...\n";
+                break;
+
             default:
-                cout << "\nInvalid choice. Please select a valid option.";
+                cout << "Invalid choice!\n";
         }
-    }
+    } while (choice != 7);
 
     return 0;
 }
-
-
-
