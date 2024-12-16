@@ -10,21 +10,22 @@ OUTPUT:
 	a) Add Job in Queue
 	b) Delete Job from Queue
 	c) Display Queue
-	
-AUTHOR:  Sunil
-DATE: 13.10.2024
+
 */
 #include<iostream>
-#define MAX 10
+#define MAX 10 //Defines a constant MAX, representing the maximum size of the queue (10 jobs).
 using namespace std;
+
 //ADT Job
-typedef struct Job{
+typedef struct Job{ //The typedef keyword allows you to create new names (aliases) for existing data types
 	int ID;//ID number of a job
 	string name;//Name of Job
 	
-}JOB;
+}JOB; //Allows the usage of JOB as a shorthand for struct Job.
+
+
 //ADT Queue
-class Queue{
+class Queue{ 
 	private:
 		JOB Q[MAX];//Queue using array of objects
 		int front,rear;//pointer to the first element and last element of a Queue
