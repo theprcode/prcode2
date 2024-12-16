@@ -18,136 +18,130 @@ DATE: 23.07.2024
 '''
 import datetime
 
-#ADT of Student
+# ADT of Student
 class Student:
     def __init__(self):
-        self.PRN=None
-        self.dob=datetime.date
+        self.PRN = None
+        self.dob = None  # Initialize date of birth as None
 
-#Implementation Class
+
+# Implementation Class
 class SEComputer:
     def __init__(self):
-        self.n1=0 #No. of students in SE-A
-        self.n2=0 #No. of students in SE-B
-        self.n3=0 #No. of students in SE Computer
-        self.SEAList=[] #SE-A division list
-        self.SEBList=[] #SE-B division list
-        self.SECOMPList=[] #SE-A& SE-B division list, SE Computer
-        
-    #Function/Method for reading Student information SE-A
+        self.n1 = 0  # No. of students in SE-A
+        self.n2 = 0  # No. of students in SE-B
+        self.n3 = 0  # No. of students in SE Computer
+        self.SEAList = []  # SE-A division list
+        self.SEBList = []  # SE-B division list
+        self.SECOMPList = []  # Merged SE-A & SE-B division list
+
+    # Read Student Information for SE-A
     def readStudentdataSEA(self):
-        self.n1=int(input("Enter the no. of students for SE-A:"))
+        self.n1 = int(input("Enter the no. of students for SE-A: "))
         for i in range(self.n1):
-            s=Student()
-            print("Enter information for student-",i+1)
-            s.PRN=input("Enter your PRN::")
-            day=int(input("Enter day of the birth::"))
-            month=int(input("Enter month of the birth::"))
-            year=int(input("Enter year of the birth, 4-digits::"))
-            s.dob=datetime.date(year,month,day)
+            s = Student()
+            print(f"Enter information for student {i+1}:")
+            s.PRN = input("Enter your PRN: ")
+            day = int(input("Enter day of birth: "))
+            month = int(input("Enter month of birth: "))
+            year = int(input("Enter year of birth (4 digits): "))
+            s.dob = datetime.date(year, month, day)
             self.SEAList.append(s)
-            
-    #Function/Method for reading Student information SE-B
+
+    # Read Student Information for SE-B
     def readStudentdataSEB(self):
-        self.n2=int(input("Enter the no. of students for SE-B:"))
+        self.n2 = int(input("Enter the no. of students for SE-B: "))
         for i in range(self.n2):
-            s=Student()
-            print("Enter information for student-",i+1)
-            s.PRN=input("Enter your PRN::")
-            day=int(input("Enter day of the birth::"))
-            month=int(input("Enter month of the birth::"))
-            year=int(input("Enter year of the birth, 4-digits::"))
-            s.dob=datetime.date(year,month,day)
+            s = Student()
+            print(f"Enter information for student {i+1}:")
+            s.PRN = input("Enter your PRN: ")
+            day = int(input("Enter day of birth: "))
+            month = int(input("Enter month of birth: "))
+            year = int(input("Enter year of birth (4 digits): "))
+            s.dob = datetime.date(year, month, day)
             self.SEBList.append(s)
-            
-    #Function/Method for displaying book information SE-A
+
+    # Display Student List for SE-A
     def displayStudentListSEA(self):
-        for i in range(self.n1):
-            print("\n\t",self.SEAList[i].PRN,"  ",str(self.SEAList[i].dob))
-    
-    #Function/Method for displaying book information SE-B
+        print("\nSE-A Student List:")
+        for student in self.SEAList:
+            print(f"\t{student.PRN} - {student.dob}")
+
+    # Display Student List for SE-B
     def displayStudentListSEB(self):
-        for i in range(self.n2):
-            print("\n\t",self.SEBList[i].PRN,"  ",str(self.SEBList[i].dob))
-    
-    #Function/Method for displaying book information SE Computer
+        print("\nSE-B Student List:")
+        for student in self.SEBList:
+            print(f"\t{student.PRN} - {student.dob}")
+
+    # Display Merged Student List for SE Computer
     def displayStudentListSECOMP(self):
-        for i in range(self.n3):
-            print("\n\t",self.SEBList[i].PRN,"  ",str(self.SEBList[i].dob))
-        
-    def sortStudentList(self,nos,List):#Actual parameters
-        for i in range(nos-1):
-            for j in range(0,nos-i-1):
-                if List[j].dob > List[j+1].dob:
-                    temp=List[j]
-                    List[j] = List[j+1] 
-                    List[j+1]=temp
-    
+        print("\nSE-Computer Merged Student List:")
+        for student in self.SECOMPList:
+            print(f"\t{student.PRN} - {student.dob}")
+
+    # Sort Student List using Bubble Sort
+    def sortStudentList(self, nos, List):
+        for i in range(nos - 1):
+            for j in range(nos - i - 1):
+                if List[j].dob > List[j + 1].dob:
+                    List[j], List[j + 1] = List[j + 1], List[j]
+
+    # Merge SE-A and SE-B Lists into SE Computer List
     def mergeList(self):
-        self.SECOMPList=[]
-        #list SE-A & SE-B are empty
-        if (self.n1==0 and self.n2==0):
-            print("No students found in SE-A & SE-B")
-        elif(self.n1==0): #list SE-A is empty then copy list SE-B 
-            for i in range(self.n2):
-                SECOMPList.append(self.SEBList[i])
-        elif(self.n2==0): #list SE-B is empty then copy list SE-A 
-            for i in range(self.n1):
-                SECOMPList.append(self.SEBList[i])
-        elif(self.n1 >0 and self.n2 >0):#list SE-A & SE-B have students
-            #copy SE-A students
-            for i in range(self.n2):
-                SECOMPList.append(self.SEBList[i])
-            #copy SE-A students
-            for i in range(self.n1):
-                SECOMPList.append(self.SEBList[i])
+        self.SECOMPList = []
+        # Merge SE-A and SE-B
+        self.SECOMPList.extend(self.SEAList)
+        self.SECOMPList.extend(self.SEBList)
+        self.n3 = len(self.SECOMPList)
+        # Sort the merged list
+        self.sortStudentList(self.n3, self.SECOMPList)
 
 
-#Driver Code
-obj=SEComputer()
-choice=0
-while(choice != 5):
-    print("\n***************SE COMPUTER STUDENT *******************")
+# Driver Code
+obj = SEComputer()
+choice = 0
+
+while choice != 5:
+    print("\n*************** SE COMPUTER STUDENT *******************")
     print("1. Read SE-A/SE-B Student Lists")
-    print("2. Display SE-A/SE-B  Student Lists")
-    print("3. Sort SE-A/SE-B Student Lists ")
-    print("4. Merge SE-A/SE-B  Student Lists ")
+    print("2. Display SE-A/SE-B Student Lists")
+    print("3. Sort SE-A/SE-B Student Lists")
+    print("4. Merge SE-A/SE-B Student Lists")
     print("5. Exit Application")
-    choice=int(input("Enter your choice:"))
-        
-    if(choice == 1):
-        print("Enter SE-A student information")
+    choice = int(input("Enter your choice: "))
+
+    if choice == 1:
+        print("Enter SE-A student information:")
         obj.readStudentdataSEA()
-        print("Enter SE-B student information")
+        print("Enter SE-B student information:")
         obj.readStudentdataSEB()
-        
-    elif(choice == 2):
-        print("List of SE-A")
+
+    elif choice == 2:
+        print("SE-A Student Information:")
         obj.displayStudentListSEA()
-        
-        print("List of SE-B")
+        print("SE-B Student Information:")
         obj.displayStudentListSEB()
-        
-    elif(choice == 3):
-        choice1=0
-        print("1. Sort SE-A")
-        print("2. Sort SE-B")
-        print("3. Sort SEComputer")
-        choice1=int(input("Enter your choice:"))
-        
-        if(choice1==1):
-            obj.sortStudentList(obj.n1,obj.SEAList)#SE-A formal parameters
-        elif(choice1==2):
-            obj.sortStudentList(obj.n2,obj.SEBList)#SE-B  
-        
-    elif(choice == 4):
+
+    elif choice == 3:
+        print("\n1. Sort SE-A\n2. Sort SE-B")
+        sub_choice = int(input("Enter your choice: "))
+        if sub_choice == 1:
+            obj.sortStudentList(obj.n1, obj.SEAList)
+            print("SE-A List Sorted Successfully.")
+        elif sub_choice == 2:
+            obj.sortStudentList(obj.n2, obj.SEBList)
+            print("SE-B List Sorted Successfully.")
+        else:
+            print("Invalid choice!")
+
+    elif choice == 4:
         obj.mergeList()
-        print("List of SE-COMPUTER")
+        print("Merged SE-Computer List:")
         obj.displayStudentListSECOMP()
-    
-    elif(choice == 5):
-        print("Good By!!")
+
+    elif choice == 5:
+        print("Goodbye!")
         break
-    
+
     else:
-        print("Wrong Choice!!!")
+        print("Invalid choice! Please try again.")
