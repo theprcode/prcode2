@@ -18,99 +18,96 @@ OUTPUT:
 AUTHOR: Dr. Sunil D. Rathod
 DATE: 01.08.2024
 '''
-
-#Implementation class
+# Implementation class
 class FEStudent:
     def __init__(self):
-        self.N=0 # Number of students in FE
-        self.studentList=[] #List of students in FE
-        self.bSortList=[] # Sorted list for Bubble sort
-        self.sSortList=[] # Sorted list for Selection sort
-    
-    
+        self.N = 0  # Number of students in FE
+        self.studentList = []  # List of students in FE
+        self.bSortList = []  # Sorted list for Bubble sort
+        self.sSortList = []  # Sorted list for Selection sort
+
     def initialize(self):
-        self.N=0 # Number of students in FE
-        self.studentList=[] #List of students in FE
-        self.bSortList=[] # Sorted list for Bubble sort
-        self.sSortList=[] # Sorted list for Selection sort
-    
-    #1. Read Student percentage
-    def getStudentPercentage(self,nos):
-        self.N=nos
+        """Initialize the student lists."""
+        self.N = 0
+        self.studentList = []
+        self.bSortList = []
+        self.sSortList = []
+
+    # 1. Read Student percentage
+    def getStudentPercentage(self, nos):
+        self.N = nos
         for i in range(self.N):
-            print("Enter percentage of student",i+1)
-            percent=float(input())
+            percent = float(input(f"Enter percentage of student {i+1}: "))
             self.studentList.append(percent)
             self.bSortList.append(percent)
             self.sSortList.append(percent)
-        
-    #2. Display Student percentage
-    def displayStudentList(self,List):
-        print("\nThe percentage of FE students")
-        for i in range(self.N):
-            print(List[i],end=" ")
 
-    #3. Display List of students in acending order of percentage using Bubble Sort
+    # 2. Display Student percentage
+    def displayStudentList(self, List):
+        print("\nStudent percentages:")
+        for percent in List:
+            print(f"{percent:.2f}", end=" ")
+        print()
+
+    # 3. Sort list using Bubble Sort
     def bubbleSort(self):
-        for i in range(self.N-1):
-            print("\nThe nos. after ",i+1," pass")
-            for j in range(0,self.N-i-1):
-                if self.bSortList[j] > self.bSortList[j+1]:
-                    temp=self.bSortList[j]
-                    self.bSortList[j] = self.bSortList[j+1] 
-                    self.bSortList[j+1]=temp
-                    
-            for k in range(self.N):
-                print(self.bSortList[k],end=" ")
-    
-    #4. Display List of students in acending order of percentage using Selection Sort
-    def selectionSort(self):
-        for i in range(self.N-1):
-            print("\nThe nos. after ",i+1," pass")
-            for j in range(i+1,self.N):
-                if self.sSortList[i] > self.sSortList[j]:
-                    temp=self.sSortList[i]
-                    self.sSortList[i] = self.sSortList[j] 
-                    self.sSortList[j]=temp
-            for k in range(self.N):
-                print(self.sSortList[k],end=" ") 
-    
-    #5.Top 5 Score
-    def topFive(self):
-        topScore=self.sSortList[-5:]
-        print("Top scores are ",topScore)
-    
-        
-#Driver Code
-std=FEStudent()
-choice=0
+        for i in range(self.N - 1):
+            for j in range(self.N - i - 1):
+                if self.bSortList[j] > self.bSortList[j + 1]:
+                    self.bSortList[j], self.bSortList[j + 1] = self.bSortList[j + 1], self.bSortList[j]
+            print(f"Pass {i + 1}: {self.bSortList}")
 
-while(choice != 6):
-    print("\n*************SORTING ALGORITHMS****************")
+    # 4. Sort list using Selection Sort
+    def selectionSort(self):
+        for i in range(self.N - 1):
+            min_idx = i
+            for j in range(i + 1, self.N):
+                if self.sSortList[j] < self.sSortList[min_idx]:
+                    min_idx = j
+            if min_idx != i:
+                self.sSortList[i], self.sSortList[min_idx] = self.sSortList[min_idx], self.sSortList[i]
+            print(f"Pass {i + 1}: {self.sSortList}")
+
+    # 5. Display Top 5 Scores
+    def topFive(self):
+        self.sSortList.sort(reverse=True)  # Sorting in descending order for top scores
+        top_scores = self.sSortList[:5]
+        print("\nTop 5 Scores:")
+        for score in top_scores:
+            print(f"{score:.2f}", end=" ")
+        print()
+
+
+# Driver Code
+std = FEStudent()
+choice = 0
+
+while choice != 6:
+    print("\n************* SORTING ALGORITHMS ****************")
     print("1. Read Student Percentage Marks")
     print("2. Display Student Percentage Marks")
-    print("3. Sort Students List using bubble sort")
-    print("4. Sort Students List using selection sort")
-    print("5. Display top five scores")
+    print("3. Sort Students List using Bubble Sort")
+    print("4. Sort Students List using Selection Sort")
+    print("5. Display Top Five Scores")
     print("6. Exit Application")
-    choice=int(input("What operation::"))
-    
-    if (choice ==1):
+    choice = int(input("Choose an operation: "))
+
+    if choice == 1:
         std.initialize()
-        n=int(input("Enter number of Students in FE::"))
+        n = int(input("Enter number of students in FE: "))
         std.getStudentPercentage(n)
-    elif (choice ==2):
+    elif choice == 2:
         std.displayStudentList(std.studentList)
-    elif (choice ==3):
+    elif choice == 3:
         std.bubbleSort()
-        std.displayStudentList(std.bSortList)     
-    elif (choice ==4):
+        std.displayStudentList(std.bSortList)
+    elif choice == 4:
         std.selectionSort()
-        std.displayStudentList(std.sSortList)    
-    elif (choice ==5):
-        pass
-    elif (choice ==6):
-        print("Good By")
+        std.displayStudentList(std.sSortList)
+    elif choice == 5:
+        std.topFive()
+    elif choice == 6:
+        print("Goodbye!")
         break
     else:
-        print("Wrong Choice")
+        print("Invalid choice. Please try again.")
