@@ -30,9 +30,10 @@ using namespace std;
 struct Node {
     int prn;
     string name;
+    string memberType; // Regular, President, Secretary
     Node* next;
 
-    Node(int prn, string name) : prn(prn), name(name), next(nullptr) {}
+    Node(int prn, string name, string memberType) : prn(prn), name(name), memberType(memberType), next(nullptr) {}
 };
 
 class Club {
@@ -43,8 +44,8 @@ public:
     Club() : head(nullptr) {}
 
     // Add member at the end
-    void addMember(int prn, string name) {
-        Node* newNode = new Node(prn, name);
+    void addMember(int prn, string name, string memberType) {
+        Node* newNode = new Node(prn, name, memberType);
         if (!head) {
             head = newNode;
         } else {
@@ -105,9 +106,9 @@ public:
         }
 
         Node* temp = head;
-        cout << "Address\t\tPRN\tName\n";
+        cout << "Address\t\tPRN\tName\tMember Type\n";
         while (temp) {
-            cout << temp << "\t" << temp->prn << "\t" << temp->name << "\n";
+            cout << temp << "\t" << temp->prn << "\t" << temp->name << "\t" << temp->memberType << "\n";
             temp = temp->next;
         }
     }
@@ -130,7 +131,7 @@ public:
 int main() {
     Club seA, seB;
     int choice, prn;
-    string name;
+    string name, memberType;
 
     do {
         cout << "\nMenu:\n";
@@ -147,19 +148,21 @@ int main() {
 
         switch (choice) {
             case 1:
-                cout << "Enter PRN and Name for SE-A: ";
+                cout << "Enter PRN, Name, and Member Type (Regular/President/Secretary) for SE-A: ";
                 cin >> prn;
                 cin.ignore();
                 getline(cin, name);
-                seA.addMember(prn, name);
+                getline(cin, memberType);
+                seA.addMember(prn, name, memberType);
                 break;
 
             case 2:
-                cout << "Enter PRN and Name for SE-B: ";
+                cout << "Enter PRN, Name, and Member Type (Regular/President/Secretary) for SE-B: ";
                 cin >> prn;
                 cin.ignore();
                 getline(cin, name);
-                seB.addMember(prn, name);
+                getline(cin, memberType);
+                seB.addMember(prn, name, memberType);
                 break;
 
             case 3:
